@@ -3,6 +3,8 @@ onbreak {resume}
 
 if {[file exists work]} { vdel -lib work -all }
 vlib work
+# Quartus NativeLink maps "work" to rtl_work; force the local library.
+vmap work work
 
 vcom -2008 -quiet \
     ../rtl/cpu_pkg.vhd \
@@ -28,6 +30,10 @@ foreach tb {alu_tb register_file_tb} {
 
 foreach t {0 1 2 3 4 5 6} {
     vsim -quiet -L altera_mf -gTEST=$t work.cpu_tb
+    # Registers are 'U' until reset is applied at t=0; mute only that instant.
+    set NumericStdNoWarnings 1
+    run 0 ns
+    set NumericStdNoWarnings 0
     run -all
     quit -sim
 }

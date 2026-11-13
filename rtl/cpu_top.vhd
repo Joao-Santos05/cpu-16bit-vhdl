@@ -7,7 +7,8 @@ entity cpu_top is
     generic (
         INIT_FILE     : string   := "../mif/programa_teste.mif";
         ADDR_WIDTH    : positive := 8;
-        STABLE_CYCLES : positive := 500_000
+        STABLE_CYCLES : positive := 500_000;
+        RUNTIME_MOD   : boolean  := true
     );
     port (
         CLOCK_50 : in  std_logic;
@@ -73,7 +74,7 @@ begin
         );
 
     u_memory : entity work.memory
-        generic map (ADDR_WIDTH => ADDR_WIDTH, INIT_FILE => INIT_FILE)
+        generic map (ADDR_WIDTH => ADDR_WIDTH, INIT_FILE => INIT_FILE, RUNTIME_MOD => RUNTIME_MOD)
         port map (
             clk   => CLOCK_50,
             we    => mem_write,
