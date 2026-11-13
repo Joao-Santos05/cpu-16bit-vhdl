@@ -7,8 +7,9 @@ use altera_mf.altera_mf_components.all;
 
 entity memory is
     generic (
-        ADDR_WIDTH : positive := 8;
-        INIT_FILE  : string   := "programa_teste.mif"
+        ADDR_WIDTH  : positive := 8;
+        INIT_FILE   : string   := "programa_teste.mif";
+        RUNTIME_MOD : boolean  := false
     );
     port (
         clk   : in  std_logic;
@@ -20,7 +21,20 @@ entity memory is
 end entity;
 
 architecture rtl of memory is
+
     signal clk_n : std_logic;
+
+    -- RUNTIME_MOD exposes the RAM to the In-System Memory Content Editor (JTAG),
+    -- so a program can be loaded without recompiling.
+    function ram_hint(runtime_mod : boolean) return string is
+    begin
+        if runtime_mod then
+            return "ENABLE_RUNTIME_MOD=YES,INSTANCE_ID=RAM";
+        else
+            return "ENABLE_RUNTIME_MOD=NO";
+        end if;
+    end function;
+
 begin
 
     -- Address is registered on the falling edge so a read completes within a
@@ -41,7 +55,7 @@ begin
             power_up_uninitialized        => "FALSE",
             init_file                     => INIT_FILE,
             intended_device_family        => "Cyclone IV E",
-            lpm_hint                      => "ENABLE_RUNTIME_MOD=NO",
+            lpm_hint                      => ram_hint(RUNTIME_MOD),
             lpm_type                      => "altsyncram",
             width_byteena_a               => 1
         )

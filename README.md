@@ -51,4 +51,4 @@ quartus/  Projeto Quartus (DE2-115, EP4CE115F29C7)
 | `HEX3–0` | PC |
 | `LEDG[3:0]` / `LEDR[13:0]` | Estado da FSM (binário / one-hot) |
 
-O programa carregado é definido por `set_parameter -name INIT_FILE` em `quartus/cpu_top.qsf`.
+O programa inicial é definido por `set_parameter -name INIT_FILE` em `quartus/cpu_top.qsf`. Para trocar de programa sem recompilar, use **Tools → In-System Memory Content Editor** (instância `RAM`): importe o `.mif` desejado, grave na memória e aperte `KEY1`.

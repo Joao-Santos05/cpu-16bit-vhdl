@@ -9,8 +9,9 @@ use work.cpu_pkg.all;
 -- understands "<dec addr> : <16-bit bin>;" lines; anything else is ignored.
 entity memory is
     generic (
-        ADDR_WIDTH : positive := 8;
-        INIT_FILE  : string   := "programa_teste.mif"
+        ADDR_WIDTH  : positive := 8;
+        INIT_FILE   : string   := "programa_teste.mif";
+        RUNTIME_MOD : boolean  := false
     );
     port (
         clk   : in  std_logic;
